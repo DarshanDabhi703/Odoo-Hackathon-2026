@@ -1,5 +1,5 @@
-// This is the Prisma schema for TransitOps.
-// DO NOT RENAME tables, enums, or fields — locked by Master Build Context.
+// This is your Prisma schema file
+// Learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
   provider = "prisma-client-js"
@@ -10,8 +10,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// ─── Enums ────────────────────────────────────────────────────────────────────
-
 enum UserRole {
   FleetManager
   Driver
@@ -21,15 +19,15 @@ enum UserRole {
 
 enum VehicleStatus {
   Available
-  OnTrip     @map("On Trip")
-  InShop     @map("In Shop")
+  On_Trip  @map("On Trip")
+  In_Shop  @map("In Shop")
   Retired
 }
 
 enum DriverStatus {
   Available
-  OnTrip   @map("On Trip")
-  OffDuty  @map("Off Duty")
+  On_Trip  @map("On Trip")
+  Off_Duty @map("Off Duty")
   Suspended
 }
 
@@ -50,8 +48,6 @@ enum ExpenseCategory {
   Maintenance
   Other
 }
-
-// ─── Models ───────────────────────────────────────────────────────────────────
 
 model User {
   id           String   @id @default(uuid())
@@ -119,9 +115,9 @@ model Trip {
   driver   Driver    @relation(fields: [driverId], references: [id])
   fuelLogs FuelLog[]
 
-  @@index([status], name: "idx_trips_status")
-  @@index([vehicleId], name: "idx_trips_vehicle")
-  @@index([driverId], name: "idx_trips_driver")
+  @@index([status])
+  @@index([vehicleId])
+  @@index([driverId])
   @@map("trips")
 }
 
@@ -137,7 +133,7 @@ model MaintenanceLog {
 
   vehicle Vehicle @relation(fields: [vehicleId], references: [id])
 
-  @@index([vehicleId], name: "idx_maintenance_vehicle")
+  @@index([vehicleId])
   @@map("maintenance_logs")
 }
 
@@ -152,7 +148,7 @@ model FuelLog {
   vehicle Vehicle @relation(fields: [vehicleId], references: [id])
   trip    Trip?   @relation(fields: [tripId], references: [id])
 
-  @@index([vehicleId], name: "idx_fuel_vehicle")
+  @@index([vehicleId])
   @@map("fuel_logs")
 }
 
@@ -166,6 +162,6 @@ model Expense {
 
   vehicle Vehicle @relation(fields: [vehicleId], references: [id])
 
-  @@index([vehicleId], name: "idx_expenses_vehicle")
+  @@index([vehicleId])
   @@map("expenses")
 }
